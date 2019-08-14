@@ -3,14 +3,11 @@ node {
     git 'https://github.com/MiralDonda/maven_demo.git'
   }
   
-   stage('Build & Package') {
-    withSonarQubeEnv('SonarQube') {
-        sh 'mvn clean package sonar:sonar'
+ stage('SonarQube analysis') {
+    withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonar_server') 
+   { // You can override the credential to be used
+      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
     }
+  }
 }
 
- stage('Results'){  
-    archive 'gameoflife-web/target/gameoflife.war'
-    junit 'gameoflife-web/target/surefire-reports/*.xml'
- }
-}
