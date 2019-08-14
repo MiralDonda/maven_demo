@@ -3,14 +3,15 @@ node {
     git 'https://github.com/MiralDonda/maven_demo.git'
   }
   
-    stage("SonarQube Quality Gate") { 
-      withSonarQubeEnv('sonar'){
-        timeout(time: 1, unit: 'HOURS') { 
-           def qg = waitForQualityGate() 
-           if (qg.status != 'OK') {
-             error "Pipeline aborted due to quality gate failure: ${qg.status}"
-           }
-        }
+   stage('Build & Package') {
+    withSonarQubeEnv('SonarQube') {
+        sh 'mvn clean package sonar:sonar'
     }
+}
+
+ stage('Results'){
+    archive 'gameoflife-web/target/gameoflife.war'
+    junit 'gameoflife-web/target/surefire-reports/*.xml'
+}
 }
 }
