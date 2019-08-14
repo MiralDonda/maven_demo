@@ -1,7 +1,7 @@
 node {
   stage('SCM') {
    
-    git 'https://github.com/javaparser/javaparser-maven-sample.git'
+    git 'https://github.com/MiralDonda/maven_demo.git'
     
   }
   stage('SonarQube analysis') {
